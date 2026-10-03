@@ -98,7 +98,7 @@
 
   .wrap { max-width: 1280px; margin: 28px auto; padding: 0 24px; }
 
-  /* Buttons - Clean Flat Modern Style */
+  /* Buttons */
   .btn {
     font-family: var(--font-sans);
     font-size: 13px;
@@ -135,7 +135,7 @@
 
   input[type=file] { display: none; }
 
-  /* Cards - Matching Image Dashboard Style */
+  /* Branch Box */
   .branch-box {
     background: var(--bg-card);
     border-radius: var(--radius-lg);
@@ -317,7 +317,7 @@
     font-weight: 700;
   }
 
-  /* Camera Video & OCR Guide Box Overlay */
+  /* Camera Video Overlay */
   #cam-video-wrap {
     position: relative; width: 100%; height: 220px; background: #000;
     border-radius: 12px; overflow: hidden; margin-bottom: 12px;
@@ -329,7 +329,7 @@
     box-shadow: 0 0 0 9999px rgba(0,0,0,0.4); border-radius: 8px; pointer-events: none;
   }
 
-  /* DEDICATED PHONE SCANNER MODE STYLES */
+  /* Dedicated Scanner Mode */
   body.scanner-mode header,
   body.scanner-mode .wrap > *:not(#scan-overlay),
   body.scanner-mode #qr-modal-overlay {
@@ -348,7 +348,7 @@
     padding: 16px !important;
   }
 
-  /* LOADING OVERLAY AND SPINNER ANIMATION */
+  /* Loading Spinner Overlay */
   .loading-overlay {
     position: fixed;
     top: 0; left: 0; width: 100vw; height: 100vh;
@@ -1268,7 +1268,7 @@
     `).join('');
   }
 
-  // ROBUST SEARCH MATCHING ENGINE Across Current & All Categories
+  // ROBUST SEARCH MATCHING ENGINE With "Already Scanned" Warning
   function markScannedCodeAsCounted(scannedCode) {
     if (!scannedCode) return false;
     const cleanCode = scannedCode.toString().trim().replace(/[\r\n\t ]+/g, '');
@@ -1281,6 +1281,13 @@
     });
     
     if (hit) {
+      // BAGONG CHECK: Kapag na-scan na dati (May actual count na)
+      if (hit.actual !== null && hit.actual !== undefined && hit.actual > 0) {
+        setStatus(`⚠️ ALREADY SCANNED: ${hit.ptn} (Na-scan na kini!)`);
+        return false; // HINDI na lalabas ang details sa banner
+      }
+
+      // Kapag BAGONG SCAN pa lang
       hit.actual = hit.expected;
       hit.lastScannedAt = Date.now();
       persistCounts();
@@ -1294,20 +1301,31 @@
 
     // 2. Search Across All Categories if not in active category
     let foundGlobal = false;
+    let alreadyScannedGlobal = false;
+
     CATEGORIES.forEach(c => {
       const data = categoryData[c.key];
       if (!data) return;
       data.tickets.forEach(t => {
         const cleanPtn = t.ptn.toString().trim().replace(/[\r\n\t ]+/g, '');
         if (cleanPtn === cleanCode || cleanPtn.includes(cleanCode) || cleanCode.includes(cleanPtn)) {
-          t.actual = t.expected;
-          t.lastScannedAt = Date.now();
-          saveFullCategoryState(c.key);
-          updateLastScannedBanner(t);
-          foundGlobal = true;
+          if (t.actual !== null && t.actual !== undefined && t.actual > 0) {
+            alreadyScannedGlobal = true;
+          } else {
+            t.actual = t.expected;
+            t.lastScannedAt = Date.now();
+            saveFullCategoryState(c.key);
+            updateLastScannedBanner(t);
+            foundGlobal = true;
+          }
         }
       });
     });
+
+    if (alreadyScannedGlobal && !foundGlobal) {
+      setStatus(`⚠️ ALREADY SCANNED: ${cleanCode} (Na-scan na kini sa kabilang category!)`);
+      return false;
+    }
 
     if (foundGlobal) {
       if (activeCategory) { renderStats(); renderTable(); }
@@ -1367,7 +1385,7 @@
       if (scanDebounceTimer) clearTimeout(scanDebounceTimer);
       scanDebounceTimer = setTimeout(() => {
         processBarcodeScan();
-      }, 100); // 0.1s fast scan response
+      }, 100); // 0.1s ultra-fast response
     }
   });
 
