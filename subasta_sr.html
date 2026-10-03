@@ -1322,13 +1322,21 @@
 
   $('#search').addEventListener('input', renderTable);
 
-  $('#search').addEventListener('keydown', e=>{
-    if(e.key !== 'Enter') return;
+  // AUTOMATIC MATCH & CLEAR SEARCH BAR ON SCAN / ENTER KEY PRESS
+  $('#search').addEventListener('keydown', e => {
+    if (e.key !== 'Enter') return;
+    
     const scanned = $('#search').value.trim();
-    if(!scanned) return;
+    if (!scanned) return;
+    
+    // Mark item as counted / match
     markScannedCodeAsCounted(scanned);
-    $('#search').select();
+    
+    // Clear the search bar automatically for the next barcode scan
+    $('#search').value = '';
+    $('#search').focus();
   });
+
   $('#filter-status').addEventListener('change', renderTable);
 
   function runGlobalSearch(){
@@ -1369,7 +1377,8 @@
     const scanned = $('#global-search-input').value.trim();
     if(!scanned) return;
     markScannedCodeAsCounted(scanned);
-    $('#global-search-input').select();
+    $('#global-search-input').value = '';
+    $('#global-search-input').focus();
   });
 
   // --- TESSERACT.JS TEXT/NUMBER OCR SCANNING ENGINE ---
@@ -1441,9 +1450,9 @@
             $('#scan-result').textContent = `✓ OCR MATCH: ${detectedCode}`;
 
             if(scanMode === 'toolbar'){
-              $('#search').value = detectedCode;
+              $('#search').value = '';
             } else {
-              $('#global-search-input').value = detectedCode;
+              $('#global-search-input').value = '';
               runGlobalSearch();
             }
 
@@ -1462,7 +1471,7 @@
     } catch(err) {
       console.error("Camera stream error:", err);
       $('#scan-result').style.color = '#dc2626';
-      $('#scan-result').textContent = '⚠️ Cannot load camera stream. Check permissions.';
+      $('#scan-result').textContent = '⚠️️ Cannot load camera stream. Check permissions.';
     }
   }
 
@@ -1505,9 +1514,9 @@
         $('#scan-result').textContent = `✓ OCR MATCH: ${detectedCode}`;
 
         if(scanMode === 'toolbar'){
-          $('#search').value = detectedCode;
+          $('#search').value = '';
         } else {
-          $('#global-search-input').value = detectedCode;
+          $('#global-search-input').value = '';
           runGlobalSearch();
         }
       } else {
