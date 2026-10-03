@@ -1292,6 +1292,7 @@
       renderTable();
       updateLastScannedBanner(hit);
       setStatus(`✓ Scanned & Counted: ${hit.ptn}`);
+      playSuccessBeep();
       return true;
     } 
 
@@ -1313,6 +1314,7 @@
     if (foundGlobal) {
       if (activeCategory) { renderStats(); renderTable(); }
       setStatus(`✓ Scanned & Counted across categories: ${cleanCode}`);
+      playSuccessBeep();
       return true;
     }
 
@@ -1320,21 +1322,36 @@
     return false;
   }
 
-  $('#search').addEventListener('input', renderTable);
+  // Filter table on typing, but do not re-render if Enter is pressed
+  $('#search').addEventListener('input', e => {
+    if (e.inputType === 'insertLineBreak') return;
+    renderTable();
+  });
 
-  // AUTOMATIC MATCH & CLEAR SEARCH BAR ON SCAN / ENTER KEY PRESS
+  // Automatic Match & Clear on Barcode Scan / Enter Key
   $('#search').addEventListener('keydown', e => {
-    if (e.key !== 'Enter') return;
-    
-    const scanned = $('#search').value.trim();
-    if (!scanned) return;
-    
-    // Mark item as counted / match
-    markScannedCodeAsCounted(scanned);
-    
-    // Clear the search bar automatically for the next barcode scan
-    $('#search').value = '';
-    $('#search').focus();
+    if (e.key === 'Enter' || e.keyCode === 13) {
+      e.preventDefault();
+      
+      const rawInput = $('#search').value;
+      if (!rawInput) return;
+      
+      const cleanCode = rawInput.trim().replace(/[\r\n]+/g, '');
+      
+      if (cleanCode) {
+        // Clear search bar FIRST so renderTable does not filter by old value
+        $('#search').value = '';
+        
+        // Mark item as counted
+        markScannedCodeAsCounted(cleanCode);
+        
+        // Ensure focus for next barcode scan
+        setTimeout(() => {
+          $('#search').value = '';
+          $('#search').focus();
+        }, 50);
+      }
+    }
   });
 
   $('#filter-status').addEventListener('change', renderTable);
@@ -1372,13 +1389,18 @@
 
   $('#global-search-btn').addEventListener('click', runGlobalSearch);
   $('#global-search-input').addEventListener('keydown', e=>{
-    if(e.key !== 'Enter') return;
-    runGlobalSearch();
-    const scanned = $('#global-search-input').value.trim();
-    if(!scanned) return;
-    markScannedCodeAsCounted(scanned);
-    $('#global-search-input').value = '';
-    $('#global-search-input').focus();
+    if(e.key === 'Enter' || e.keyCode === 13){
+      e.preventDefault();
+      runGlobalSearch();
+      const scanned = $('#global-search-input').value.trim().replace(/[\r\n]+/g, '');
+      if(!scanned) return;
+      $('#global-search-input').value = '';
+      markScannedCodeAsCounted(scanned);
+      setTimeout(() => {
+        $('#global-search-input').value = '';
+        $('#global-search-input').focus();
+      }, 50);
+    }
   });
 
   // --- TESSERACT.JS TEXT/NUMBER OCR SCANNING ENGINE ---
@@ -1444,7 +1466,6 @@
 
           if (success) {
             scanCooldown = true;
-            playSuccessBeep();
             
             $('#scan-result').style.color = '#16a34a';
             $('#scan-result').textContent = `✓ OCR MATCH: ${detectedCode}`;
@@ -1471,7 +1492,7 @@
     } catch(err) {
       console.error("Camera stream error:", err);
       $('#scan-result').style.color = '#dc2626';
-      $('#scan-result').textContent = '⚠️️ Cannot load camera stream. Check permissions.';
+      $('#scan-result').textContent = '⚠️ Cannot load camera stream. Check permissions.';
     }
   }
 
@@ -1509,7 +1530,6 @@
       const success = markScannedCodeAsCounted(detectedCode);
 
       if (success) {
-        playSuccessBeep();
         $('#scan-result').style.color = '#16a34a';
         $('#scan-result').textContent = `✓ OCR MATCH: ${detectedCode}`;
 
