@@ -6,7 +6,7 @@
 <title>M Lhuillier — Showroom/Subasta Inventory Report</title>
 <link rel="icon" type="image/png" href="logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -16,19 +16,17 @@
   :root {
     --primary: #cc0000;
     --primary-dark: #990000;
-    --bg-red: #bc0000;
-    --bg-gradient: linear-gradient(135deg, #d30000 0%, #900000 100%);
-    --gold: #d4af37;
-    
-    --panel-bg: #ffffff;
-    --panel-2: #fffdfd;
-    --text-main: #1e293b;
+    --bg-main: #f1f5f9;
+    --bg-card: #ffffff;
+    --text-main: #0f172a;
     --text-muted: #64748b;
     --border: #e2e8f0;
-    --border-subtle: #f1f5f9;
+    --border-subtle: #cbd5e1;
 
     --match: #16a34a;
-    --match-bg: #f0fdf4;
+    --match-bg: #dc26260d;
+    --match-green-bg: #dcfce7;
+    --match-green-text: #15803d;
     --mismatch: #dc2626;
     --mismatch-bg: #fef2f2;
     --pending: #ea580c;
@@ -37,20 +35,19 @@
     --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
     --font-mono: 'IBM Plex Mono', monospace;
 
-    --shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-    --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+    --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 10px 15px -3px rgba(0,0,0,0.07), 0 4px 6px -4px rgba(0,0,0,0.05);
     
     --radius-sm: 8px;
     --radius-md: 12px;
-    --radius-lg: 18px;
+    --radius-lg: 16px;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
     font-family: var(--font-sans);
-    background: var(--bg-gradient);
-    background-attachment: fixed;
+    background: var(--bg-main);
     color: var(--text-main);
     min-height: 100vh;
     padding-bottom: 60px;
@@ -59,17 +56,17 @@
 
   ::selection { background: var(--primary); color: #ffffff; }
 
-  /* Header Bar */
+  /* Modern White Clean Header Bar */
   header {
     background: #ffffff;
     color: var(--text-main);
     padding: 16px 32px;
-    border-bottom: 3px solid var(--gold);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow-card);
   }
 
   .header-content {
-    max-width: 1600px;
+    max-width: 1400px;
     margin: 0 auto;
     display: flex;
     align-items: center;
@@ -84,7 +81,7 @@
     gap: 14px;
   }
 
-  .header-logo-img { height: 48px; width: auto; object-fit: contain; }
+  .header-logo-img { height: 42px; width: auto; object-fit: contain; }
 
   .logo-badge {
     background: var(--primary);
@@ -94,59 +91,62 @@
     padding: 8px 14px;
     border-radius: var(--radius-sm);
     letter-spacing: -0.5px;
-    box-shadow: var(--shadow-sm);
   }
 
-  h1 { font-size: 20px; font-weight: 800; color: var(--primary); letter-spacing: -0.02em; }
-  .header-sub { font-size: 12px; color: var(--text-muted); font-weight: 500; margin-top: 1px; }
+  h1 { font-size: 22px; font-weight: 900; color: var(--text-main); letter-spacing: -0.02em; }
+  .header-sub { font-size: 13px; color: var(--text-muted); font-weight: 500; margin-top: 1px; }
 
   .wrap { max-width: 1280px; margin: 28px auto; padding: 0 24px; }
 
-  /* Buttons */
+  /* Buttons - Clean Flat Modern Style */
   .btn {
     font-family: var(--font-sans);
     font-size: 13px;
     font-weight: 700;
     background: #ffffff;
-    color: var(--primary);
-    border: none;
+    color: var(--text-main);
+    border: 1px solid var(--border);
     padding: 10px 18px;
     border-radius: var(--radius-sm);
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.15s ease-in-out;
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    box-shadow: var(--shadow-card);
   }
 
-  .btn:hover { background: #f8fafc; transform: translateY(-1px); box-shadow: 0 6px 16px rgba(0,0,0,0.2); }
+  .btn:hover { background: #f8fafc; border-color: #cbd5e1; transform: translateY(-1px); }
   .btn:active { transform: translateY(0); }
 
+  .btn.primary-btn { background: var(--primary); color: #ffffff; border: none; }
+  .btn.primary-btn:hover { background: var(--primary-dark); }
+
   .btn.ghost {
-    background: rgba(255,255,255,0.15);
-    color: #ffffff;
-    border: 1px solid rgba(255,255,255,0.3);
-    box-shadow: none;
+    background: #f8fafc;
+    color: var(--text-main);
+    border: 1px solid var(--border);
   }
-  .btn.ghost:hover { background: #ffffff; color: var(--primary); border-color: #ffffff; }
+  .btn.ghost:hover { background: #ffffff; border-color: var(--primary); color: var(--primary); }
 
   .btn.small { padding: 7px 13px; font-size: 12px; }
-  .btn-dashboard { background: #1e293b; color: #ffffff; }
+  .btn-dashboard { background: #ffffff; color: var(--text-main); border: 1px solid var(--border); }
   .btn-dashboard:hover { background: #0f172a; color: #ffffff; }
 
   input[type=file] { display: none; }
 
-  /* Branch Box & Search Box Cards */
+  /* Cards - Matching Image Dashboard Style */
   .branch-box {
-    background: var(--panel-bg);
+    background: var(--bg-card);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-card);
+    border: 1px solid var(--border);
+    border-left: 5px solid var(--primary);
     padding: 22px 26px;
     margin-bottom: 20px;
   }
-  .branch-box h3 { font-size: 17px; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
-  .branch-box p { font-size: 12.5px; color: var(--text-muted); margin-bottom: 14px; }
+  .branch-box h3 { font-size: 18px; font-weight: 800; color: var(--text-main); margin-bottom: 4px; }
+  .branch-box p { font-size: 13px; color: var(--text-muted); margin-bottom: 14px; }
 
   .input-control {
     padding: 10px 14px;
@@ -156,6 +156,7 @@
     font-size: 13.5px;
     outline: none;
     transition: border-color 0.2s;
+    background: #ffffff;
   }
   .input-control:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(204, 0, 0, 0.1); }
 
@@ -163,52 +164,52 @@
   .cat-uploads { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 20px; }
   .cat-upload-card {
     flex: 1; min-width: 240px;
-    background: var(--panel-bg);
+    background: var(--bg-card);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-card);
     padding: 24px 20px;
     text-align: center;
-    border: 2px dashed var(--border);
+    border: 1.5px dashed var(--border-subtle);
     transition: all 0.2s;
   }
   .cat-upload-card.done { border-style: solid; border-color: var(--match); background: #f0fdf4; }
-  .cat-upload-card h3 { font-size: 18px; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
+  .cat-upload-card h3 { font-size: 18px; font-weight: 800; color: var(--text-main); margin-bottom: 4px; }
   .cat-upload-card .cat-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; }
   .cat-upload-card .cat-status { margin-top: 12px; font-size: 12px; color: var(--text-muted); font-weight: 600; }
   .cat-upload-card.done .cat-status { color: var(--match); font-weight: 800; }
 
-  #status-line { margin-top: 14px; font-size: 12.5px; color: #ffffff; text-align: center; font-weight: 600; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+  #status-line { margin-top: 14px; font-size: 13px; color: var(--text-muted); text-align: center; font-weight: 700; }
 
   /* Tabs */
   .tabs {
-    display: none; margin-top: 24px; gap: 10px; flex-wrap: wrap;
+    display: none; margin-top: 20px; gap: 10px; flex-wrap: wrap;
     position: sticky; top: 0; z-index: 50;
-    background: rgba(255,255,255,0.15); backdrop-filter: blur(8px);
-    padding: 8px; border-radius: var(--radius-md);
+    background: rgba(241, 245, 249, 0.9); backdrop-filter: blur(8px);
+    padding: 8px 0; border-radius: var(--radius-md);
   }
   .tabs.show { display: flex; }
   .tab {
     flex: 1; min-width: 150px;
-    background: rgba(255,255,255,0.85); border: none; border-radius: var(--radius-sm);
-    padding: 12px 16px; cursor: pointer; transition: all 0.2s; opacity: 0.6;
+    background: #ffffff; border: 1px solid var(--border); border-radius: var(--radius-sm);
+    padding: 12px 16px; cursor: pointer; transition: all 0.2s; opacity: 0.7;
   }
   .tab.enabled { cursor: pointer; opacity: 1; }
   .tab.disabled { cursor: not-allowed; }
-  .tab.active { background: #ffffff; opacity: 1; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-  .tab .t-name { font-size: 15px; font-weight: 800; color: var(--primary); }
+  .tab.active { background: #ffffff; border-color: var(--primary); border-width: 2px; opacity: 1; box-shadow: var(--shadow-card); }
+  .tab .t-name { font-size: 15px; font-weight: 800; color: var(--text-main); }
   .tab .t-count { font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-top: 2px; }
 
   /* Dashboard Stats */
-  #dashboard { display: none; margin-top: 24px; }
+  #dashboard { display: none; margin-top: 20px; }
   #dashboard.show { display: block; }
 
   .stats-row { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 20px; }
   .stat-chip {
     flex: 1; min-width: 140px;
-    background: var(--panel-bg); border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-card); padding: 16px 20px;
+    background: var(--bg-card); border-radius: var(--radius-lg);
+    border: 1px solid var(--border); box-shadow: var(--shadow-card); padding: 16px 20px;
   }
-  .stat-chip .num { font-size: 26px; font-weight: 800; font-family: var(--font-mono); color: var(--primary); }
+  .stat-chip .num { font-size: 26px; font-weight: 800; font-family: var(--font-mono); color: var(--text-main); }
   .stat-chip .lab { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); font-weight: 800; margin-top: 2px; }
   .stat-chip.match .num { color: var(--match); }
   .stat-chip.mismatch .num { color: var(--mismatch); }
@@ -217,27 +218,27 @@
   .cat-row { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 24px; }
   .cat-card {
     flex: 1; min-width: 180px;
-    background: var(--panel-bg); border-left: 4px solid var(--primary);
-    border-radius: var(--radius-md); padding: 14px 18px; box-shadow: var(--shadow-card);
+    background: var(--bg-card); border-left: 4px solid var(--primary);
+    border-radius: var(--radius-md); padding: 14px 18px; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); box-shadow: var(--shadow-card);
   }
-  .cat-card .name { font-size: 11px; text-transform: uppercase; font-weight: 800; color: var(--primary); letter-spacing: 0.5px; }
+  .cat-card .name { font-size: 11px; text-transform: uppercase; font-weight: 800; color: var(--text-muted); letter-spacing: 0.5px; }
   .cat-card .figures { font-size: 18px; font-weight: 800; font-family: var(--font-mono); margin-top: 4px; color: var(--text-main); }
   .cat-card .figures small { font-size: 11px; color: var(--text-muted); font-weight: 600; }
 
   /* Toolbar */
   .toolbar {
     display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 12px;
-    background: var(--panel-bg); padding: 12px; border-radius: var(--radius-md); box-shadow: var(--shadow-card);
+    background: var(--bg-card); padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border); box-shadow: var(--shadow-card);
   }
   #search {
-    flex: 1; min-width: 200px; padding: 10px 14px;
+    flex: 1; min-width: 200px; padding: 12px 16px;
     border: 1.5px solid var(--border); border-radius: var(--radius-sm);
-    font-family: var(--font-sans); font-size: 13px; outline: none;
+    font-family: var(--font-mono); font-size: 15px; font-weight: 700; outline: none; background: #ffffff;
   }
-  #search:focus { border-color: var(--primary); }
+  #search:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(204, 0, 0, 0.1); }
   select {
     padding: 10px 14px; border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm); font-family: var(--font-sans); font-size: 12.5px; font-weight: 700;
+    border-radius: var(--radius-sm); font-family: var(--font-sans); font-size: 12.5px; font-weight: 700; background: #ffffff;
   }
 
   /* LAST SCANNED DISPLAY BANNER BELOW SEARCH BAR */
@@ -246,11 +247,11 @@
     margin-bottom: 16px;
     padding: 14px 18px;
     background: #f0fdf4;
-    border: 2px solid #16a34a;
+    border: 1.5px solid #bbf7d0;
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-card);
   }
-  .scanned-banner.show { display: block; animation: bannerPop 0.25s ease-out; }
+  .scanned-banner.show { display: block; animation: bannerPop 0.2s ease-out; }
 
   @keyframes bannerPop {
     from { opacity: 0; transform: translateY(-4px); }
@@ -259,17 +260,17 @@
 
   /* Ledger Table */
   .ledger {
-    background: var(--panel-bg); border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-card); overflow: hidden; padding: 8px;
+    background: var(--bg-card); border-radius: var(--radius-lg);
+    border: 1px solid var(--border); box-shadow: var(--shadow-card); overflow: hidden; padding: 8px;
   }
   table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
   thead th {
-    background: #ffffff; font-size: 11px; text-transform: uppercase; font-weight: 800;
-    color: var(--primary); text-align: left; padding: 16px 14px; border-bottom: 2px solid var(--border);
+    background: #f8fafc; font-size: 11px; text-transform: uppercase; font-weight: 800;
+    color: var(--text-muted); text-align: left; padding: 14px 14px; border-bottom: 2px solid var(--border);
     white-space: nowrap; position: sticky; top: 0; z-index: 10;
   }
-  tbody td { padding: 12px 14px; border-bottom: 1px solid #f8fafc; vertical-align: top; }
-  tbody tr:hover { background: #fffdfd; }
+  tbody td { padding: 12px 14px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+  tbody tr:hover { background: #f8fafc; }
   .ptn { font-size: 14px; font-weight: 700; font-family: var(--font-mono); color: var(--text-main); white-space: nowrap; }
   .ptn .flag { color: var(--primary); }
   .date { font-size: 13px; font-family: var(--font-mono); color: var(--text-muted); white-space: nowrap; }
@@ -285,7 +286,7 @@
   .expected { font-family: var(--font-mono); font-size: 14px; text-align: center; color: var(--text-muted); font-weight: 700; }
   .actual-input {
     width: 60px; text-align: center; font-family: var(--font-mono); font-size: 14px; font-weight: 700;
-    background: #f8fafc; border: 1.5px solid var(--border); border-radius: 6px; color: var(--text-main); padding: 5px 4px;
+    background: #ffffff; border: 1.5px solid var(--border); border-radius: 6px; color: var(--text-main); padding: 5px 4px;
   }
   .actual-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(204, 0, 0, 0.1); }
 
@@ -293,13 +294,9 @@
     display: inline-block; font-size: 11px; text-transform: uppercase;
     padding: 4px 10px; border-radius: 20px; font-weight: 700; white-space: nowrap;
   }
-  .status-badge.match { background: var(--match-bg); color: var(--match); border: 1px solid var(--match); }
-  .status-badge.mismatch { background: var(--mismatch-bg); color: var(--mismatch); border: 1px solid var(--mismatch); }
-  .status-badge.pending { background: var(--pending-bg); color: var(--pending); border: 1px solid var(--pending); }
-  .stamp {
-    display: inline-block; font-weight: 800; font-size: 10px; color: var(--match);
-    border: 1.5px solid var(--match); border-radius: 4px; padding: 1px 6px; transform: rotate(-4deg); margin-left: 6px;
-  }
+  .status-badge.match { background: var(--match-green-bg); color: var(--match-green-text); }
+  .status-badge.mismatch { background: var(--mismatch-bg); color: var(--mismatch); }
+  .status-badge.pending { background: var(--pending-bg); color: var(--pending); }
 
   .del-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 16px; padding: 2px 6px; }
   .del-btn:hover { color: var(--mismatch); }
@@ -312,12 +309,12 @@
   .actions-cell { white-space: nowrap; text-align: right; }
 
   .cloud-tag {
-    background: #16a34a;
-    color: #ffffff;
-    font-size: 11px;
-    padding: 5px 12px;
+    background: var(--match-green-bg);
+    color: var(--match-green-text);
+    font-size: 12px;
+    padding: 6px 14px;
     border-radius: 20px;
-    font-weight: 800;
+    font-weight: 700;
   }
 
   /* Camera Video & OCR Guide Box Overlay */
@@ -401,13 +398,20 @@
     letter-spacing: 0.5px;
   }
 
+  /* 100% PDF & PRINT OPTIMIZATION CSS */
   @media print {
-    header, .cat-uploads, .tabs, .toolbar, .footer-tools, #debug-toggle-wrap, .btn-dashboard, .branch-box, .scanned-banner { display: none !important; }
-    body { background: #fff; color: #000; }
-    .ledger { border: none; box-shadow: none; }
-    thead th { background: #eee; color: #000; position: static; }
-    tbody td { color: #000; border-color: #ccc; }
-    .status-badge, .stamp { display: none !important; }
+    @page {
+      size: A4 portrait;
+      margin: 10mm;
+    }
+    header, .cat-uploads, .tabs, .toolbar, .footer-tools, #debug-toggle-wrap, .btn-dashboard, .branch-box, .scanned-banner, .del-btn, .actions-cell { display: none !important; }
+    body { background: #ffffff !important; color: #000000 !important; padding: 0 !important; font-size: 11pt !important; }
+    .wrap { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
+    .ledger { border: none !important; box-shadow: none !important; padding: 0 !important; overflow: visible !important; }
+    table { width: 100% !important; border-collapse: collapse !important; table-layout: auto !important; font-size: 10pt !important; }
+    thead th { background: #f1f5f9 !important; color: #000000 !important; position: static !important; border: 1px solid #cbd5e1 !important; padding: 6px 8px !important; }
+    tbody td { color: #000000 !important; border: 1px solid #e2e8f0 !important; padding: 6px 8px !important; page-break-inside: avoid !important; }
+    .status-badge { border: 1px solid #cbd5e1 !important; padding: 2px 6px !important; font-size: 9pt !important; }
 
     body.print-missing-mode tr[data-status="match"] {
       display: none !important;
@@ -428,7 +432,7 @@
 
 <!-- TEXT OCR CAMERA SCANNER OVERLAY -->
 <div id="scan-overlay" style="display:none; position:fixed; inset:0; z-index:998; background:rgba(15, 23, 42, 0.85); backdrop-filter:blur(4px); align-items:center; justify-content:center; padding:20px;">
-  <div class="scan-card-container" style="background:var(--panel-bg); border-radius:var(--radius-lg); padding:26px 22px; max-width:440px; width:100%; text-align:center; box-shadow:var(--shadow-card);">
+  <div class="scan-card-container" style="background:var(--bg-card); border-radius:var(--radius-lg); padding:26px 22px; max-width:440px; width:100%; text-align:center; box-shadow:var(--shadow-md);">
     <h2 style="font-size:20px; font-weight:800; color:var(--primary); margin:0 0 6px;">📷 Scan Item Code Tag</h2>
     <p style="font-size:12.5px; color:var(--text-muted); margin:0 0 12px;">Itutok ang rectangle guide box sa mga numero sa tag.</p>
     
@@ -440,10 +444,10 @@
     <div id="scan-result" style="margin-top:12px; font-family:var(--font-mono); font-size:13px; color:var(--primary); font-weight:700; min-height:18px;">⚡ Point camera at tag numbers...</div>
     
     <div style="display:flex; gap:10px; margin-top:14px;">
-      <button class="btn" id="manual-ocr-scan-btn" style="flex:1; background:var(--primary); color:#ffffff; justify-content:center; padding:12px;">
+      <button class="btn primary-btn" id="manual-ocr-scan-btn" style="flex:1; justify-content:center; padding:12px;">
         ⚡ Scan / Capture Now
       </button>
-      <button class="btn ghost" id="scan-close-btn" style="background:#f1f5f9; color:#334155; border:none; padding:12px;">
+      <button class="btn ghost" id="scan-close-btn" style="padding:12px;">
         Close
       </button>
     </div>
@@ -452,14 +456,14 @@
 
 <!-- MOBILE SYNC QR MODAL -->
 <div id="qr-modal-overlay" style="display:none; position:fixed; inset:0; z-index:999; background:rgba(15, 23, 42, 0.85); backdrop-filter:blur(4px); align-items:center; justify-content:center; padding:20px;">
-  <div style="background:var(--panel-bg); border-radius:var(--radius-lg); padding:26px 22px; max-width:380px; width:100%; text-align:center; box-shadow:var(--shadow-card);">
+  <div style="background:var(--bg-card); border-radius:var(--radius-lg); padding:26px 22px; max-width:380px; width:100%; text-align:center; box-shadow:var(--shadow-md);">
     <h2 style="font-size:18px; font-weight:800; color:var(--primary); margin:0 0 6px;">📱 Mobile Sync QR</h2>
     <p style="font-size:12px; color:var(--text-muted); margin:0 0 16px;">Scan this QR code with your phone camera to open in **Dedicated Scanner Mode**.</p>
     
     <div id="mobile-qr-container" style="display:flex; justify-content:center; padding:15px; background:#fff; border-radius:12px; border:1px solid var(--border);"></div>
     
     <div id="mobile-qr-link" style="margin-top:12px; font-family:var(--font-mono); font-size:11px; color:var(--text-muted); word-break:break-all;"></div>
-    <button class="btn ghost" id="qr-modal-close-btn" style="margin-top:16px; background:#f1f5f9; color:#334155; border:none; width:100%;">Close</button>
+    <button class="btn ghost" id="qr-modal-close-btn" style="margin-top:16px; width:100%;">Close</button>
   </div>
 </div>
 
@@ -497,34 +501,23 @@
     <div style="display:flex; gap:10px; flex-wrap:wrap;">
       <input type="text" id="branch-input" class="input-control" placeholder="e.g. ML Catarman, ML Liloan 3..." style="flex:1; min-width:200px;">
       <input type="date" id="audit-date-input" class="input-control">
-      <button class="btn" id="branch-confirm-btn" style="background:var(--primary); color:#ffffff;">Start / Switch Branch</button>
+      <button class="btn primary-btn" id="branch-confirm-btn">Start / Switch Branch</button>
     </div>
     <div id="branch-current" style="margin-top:12px; font-size:13px; font-weight:700; color:var(--primary);"></div>
-  </div>
-
-  <div class="branch-box" id="global-search-box">
-    <h3>🔎 Search Item Code (All Categories)</h3>
-    <p>Look up an item code or description across Showroom and Subasta simultaneously.</p>
-    <div style="display:flex; gap:10px; flex-wrap:wrap;">
-      <input type="text" id="global-search-input" class="input-control" placeholder="Type full or partial item code / description..." style="flex:1; min-width:200px;">
-      <button class="btn" id="global-search-btn" style="background:var(--primary); color:#ffffff;">Search</button>
-      <button class="btn ghost" id="global-scan-btn" style="background:#f1f5f9; color:#334155; border:none;">📷 Scan Tag Text</button>
-    </div>
-    <div id="global-search-results" style="margin-top:14px; font-size:13px;"></div>
   </div>
 
   <div class="cat-uploads" id="cat-uploads">
     <div class="cat-upload-card" data-cat="showroom">
       <h3>Showroom</h3>
       <p class="cat-sub">Showroom inventory report</p>
-      <button class="btn small cat-upload-btn" data-cat="showroom" style="background:var(--primary); color:#fff;">Choose Excel File</button>
+      <button class="btn primary-btn small cat-upload-btn" data-cat="showroom">Choose Excel File</button>
       <input type="file" class="cat-file-input" data-cat="showroom" accept=".xlsx,.xls,.csv">
       <div class="cat-status" data-cat-status="showroom">Not uploaded yet</div>
     </div>
     <div class="cat-upload-card" data-cat="subasta">
       <h3>Subasta</h3>
       <p class="cat-sub">Subasta inventory report</p>
-      <button class="btn small cat-upload-btn" data-cat="subasta" style="background:var(--primary); color:#fff;">Choose Excel File</button>
+      <button class="btn primary-btn small cat-upload-btn" data-cat="subasta">Choose Excel File</button>
       <input type="file" class="cat-file-input" data-cat="subasta" accept=".xlsx,.xls,.csv">
       <div class="cat-status" data-cat-status="subasta">Not uploaded yet</div>
     </div>
@@ -536,12 +529,12 @@
     <button class="btn ghost small" id="backup-json-btn">💾 Backup to File</button>
     <button class="btn ghost small" id="restore-json-btn">📂 Restore from File</button>
     <input type="file" id="restore-json-input" accept=".json" style="display:none;">
-    <button class="btn ghost small" id="new-day-btn" style="background:rgba(239, 68, 68, 0.2); border-color:rgba(239, 68, 68, 0.4);">🔄 New Day (Clear Branch Data)</button>
+    <button class="btn ghost small" id="new-day-btn" style="color:var(--mismatch);">🔄 New Day (Clear Branch Data)</button>
   </div>
 
   <div id="debug-toggle-wrap" style="display:none; text-align:center; margin-top:10px;">
-    <span class="debug-toggle" id="debug-toggle" style="color:#fff; cursor:pointer; font-size:12px; text-decoration:underline;">View lines that couldn't be parsed (debug)</span>
-    <div id="debug-panel" style="display:none; background:#fff; padding:12px; border-radius:8px; margin-top:8px; text-align:left; font-size:11px; max-height:150px; overflow:auto;"></div>
+    <span class="debug-toggle" id="debug-toggle" style="color:var(--text-muted); cursor:pointer; font-size:12px; text-decoration:underline;">View lines that couldn't be parsed (debug)</span>
+    <div id="debug-panel" style="display:none; background:#fff; padding:12px; border-radius:8px; margin-top:8px; text-align:left; font-size:11px; max-height:150px; overflow:auto; border:1px solid var(--border);"></div>
   </div>
 
   <div class="tabs" id="category-tabs"></div>
@@ -550,10 +543,10 @@
     <div class="stats-row" id="stats-row"></div>
     <div class="cat-row" id="cat-row"></div>
 
-    <!-- MAIN TOOLBAR SEARCH BAR -->
+    <!-- MAIN TOOLBAR & SINGLE BARCODE SEARCH ENGINE -->
     <div class="toolbar">
-      <input type="text" id="search" placeholder="Search: item code, or description...">
-      <button class="btn ghost small" id="scan-btn" style="background:#f1f5f9; color:#334155; border:none;">📷 Scan Tag Text</button>
+      <input type="text" id="search" placeholder="⚡ Scan Barcode Tag or Type Item Code / Description here..." autofocus autocomplete="off">
+      <button class="btn ghost small" id="scan-btn">📷 Scan Tag Text</button>
       <select id="filter-status">
         <option value="all">All Status</option>
         <option value="pending">Pending</option>
@@ -565,8 +558,7 @@
     <!-- LAST SCANNED / MATCHED ITEM DISPLAY BANNER UNDER TABLE SEARCH BAR -->
     <div class="scanned-banner" id="last-scanned-banner">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-        <span style="font-size:11px; text-transform:uppercase; font-weight:900; color:#16a34a; letter-spacing:0.5px;">✓ LAST SCANNED / MATCHED ITEM DETAILS</span>
-        <span class="status-badge match">MATCHED ✓</span>
+        <span style="font-size:11px; text-transform:uppercase; font-weight:900; color:#15803d; letter-spacing:0.5px;">✓ LAST SCANNED / MATCHED ITEM DETAILS</span>
       </div>
       <div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px; align-items:center;">
         <div>
@@ -599,10 +591,10 @@
     </div>
 
     <div class="footer-tools">
-      <button class="btn ghost" id="reset-counts-btn" style="color:var(--text-main); background:#fff;">Clear Actual Counts</button>
-      <button class="btn ghost" id="export-btn" style="color:var(--text-main); background:#fff;">Export Discrepancy (CSV)</button>
-      <button class="btn ghost" id="print-missing-btn" style="color:var(--text-main); background:#fff;">Print Missing/Shortage</button>
-      <button class="btn" id="print-btn" style="background:var(--primary); color:#fff;">Print (All)</button>
+      <button class="btn ghost" id="reset-counts-btn">Clear Actual Counts</button>
+      <button class="btn ghost" id="export-btn">Export Discrepancy (CSV)</button>
+      <button class="btn ghost" id="print-missing-btn">Print Missing/Shortage</button>
+      <button class="btn primary-btn" id="print-btn">Print (All)</button>
     </div>
   </div>
 
@@ -654,6 +646,7 @@
   let ocrInterval = null;
   let scanCooldown = false;
   let scanMode = null;
+  let scanDebounceTimer = null;
 
   const $ = sel => document.querySelector(sel);
   const $$ = sel => Array.from(document.querySelectorAll(sel));
@@ -768,8 +761,6 @@
     $('#category-tabs').innerHTML = '';
     $('#category-tabs').classList.remove('show');
     $('#dashboard').classList.remove('show');
-    $('#global-search-input').value = '';
-    $('#global-search-results').innerHTML = '';
     $('#last-scanned-banner').classList.remove('show');
 
     listenFirebaseSubastaStore();
@@ -1206,7 +1197,7 @@
   }
 
   function statusBadge(st){
-    if(st==='match') return `<span class="status-badge match">Match</span><span class="stamp">✓ OK</span>`;
+    if(st==='match') return `<span class="status-badge match">Match</span>`;
     if(st==='mismatch') return `<span class="status-badge mismatch">Mismatch</span>`;
     return `<span class="status-badge pending">Pending</span>`;
   }
@@ -1277,12 +1268,17 @@
     `).join('');
   }
 
-  // UPDATE LAST SCANNED BANNER AND TOP ROW PLACEMENT
+  // ROBUST SEARCH MATCHING ENGINE Across Current & All Categories
   function markScannedCodeAsCounted(scannedCode) {
     if (!scannedCode) return false;
-    const cleanCode = scannedCode.trim();
+    const cleanCode = scannedCode.toString().trim().replace(/[\r\n\t ]+/g, '');
+    if (!cleanCode) return false;
     
-    let hit = tickets.find(t => t.ptn === cleanCode || t.ptn.includes(cleanCode));
+    // 1. Search in Active Category
+    let hit = tickets.find(t => {
+      const cleanPtn = t.ptn.toString().trim().replace(/[\r\n\t ]+/g, '');
+      return cleanPtn === cleanCode || cleanPtn.includes(cleanCode) || cleanCode.includes(cleanPtn);
+    });
     
     if (hit) {
       hit.actual = hit.expected;
@@ -1296,12 +1292,14 @@
       return true;
     } 
 
+    // 2. Search Across All Categories if not in active category
     let foundGlobal = false;
     CATEGORIES.forEach(c => {
       const data = categoryData[c.key];
       if (!data) return;
       data.tickets.forEach(t => {
-        if (t.ptn === cleanCode || t.ptn.includes(cleanCode)) {
+        const cleanPtn = t.ptn.toString().trim().replace(/[\r\n\t ]+/g, '');
+        if (cleanPtn === cleanCode || cleanPtn.includes(cleanCode) || cleanCode.includes(cleanPtn)) {
           t.actual = t.expected;
           t.lastScannedAt = Date.now();
           saveFullCategoryState(c.key);
@@ -1322,86 +1320,58 @@
     return false;
   }
 
-  // Filter table on typing, but do not re-render if Enter is pressed
-  $('#search').addEventListener('input', e => {
-    if (e.inputType === 'insertLineBreak') return;
-    renderTable();
-  });
+  // AUTOMATIC MATCH & CLEAR SEARCH BAR ON BARCODE SCANNER TYPE OR ENTER
+  function processBarcodeScan() {
+    const searchInput = $('#search');
+    if (!searchInput) return;
+    
+    const rawVal = searchInput.value;
+    if (!rawVal) return;
+    
+    const cleanCode = rawVal.trim().replace(/[\r\n]+/g, '');
+    if (!cleanCode) return;
 
-  // Automatic Match & Clear on Barcode Scan / Enter Key
+    // Execute matching
+    const matched = markScannedCodeAsCounted(cleanCode);
+    
+    // Clear Search Input IMMEDIATELY and re-focus
+    searchInput.value = '';
+    renderTable();
+    
+    setTimeout(() => {
+      searchInput.value = '';
+      searchInput.focus();
+    }, 20);
+  }
+
+  // Trigger processing on Enter Key
   $('#search').addEventListener('keydown', e => {
     if (e.key === 'Enter' || e.keyCode === 13) {
       e.preventDefault();
-      
-      const rawInput = $('#search').value;
-      if (!rawInput) return;
-      
-      const cleanCode = rawInput.trim().replace(/[\r\n]+/g, '');
-      
-      if (cleanCode) {
-        // Clear search bar FIRST so renderTable does not filter by old value
-        $('#search').value = '';
-        
-        // Mark item as counted
-        markScannedCodeAsCounted(cleanCode);
-        
-        // Ensure focus for next barcode scan
-        setTimeout(() => {
-          $('#search').value = '';
-          $('#search').focus();
-        }, 50);
-      }
+      if (scanDebounceTimer) clearTimeout(scanDebounceTimer);
+      processBarcodeScan();
+    }
+  });
+
+  // ULTRA-FAST 0.1s (100ms) DEBOUNCE DELAY
+  $('#search').addEventListener('input', e => {
+    if (e.inputType === 'insertLineBreak') return;
+    
+    const val = $('#search').value.trim();
+    
+    // Standard table filter while typing manually
+    renderTable();
+
+    // Auto-match if barcode length is reached (10+ digits) or scanner finishes typing
+    if (val.length >= 10) {
+      if (scanDebounceTimer) clearTimeout(scanDebounceTimer);
+      scanDebounceTimer = setTimeout(() => {
+        processBarcodeScan();
+      }, 100); // 0.1s fast scan response
     }
   });
 
   $('#filter-status').addEventListener('change', renderTable);
-
-  function runGlobalSearch(){
-    const q = $('#global-search-input').value.trim().toLowerCase();
-    const box = $('#global-search-results');
-    if(!q){ box.innerHTML = ''; return; }
-
-    const hits = [];
-    CATEGORIES.forEach(c=>{
-      const data = categoryData[c.key];
-      if(!data) return;
-      data.tickets.forEach(t=>{
-        const hay = (t.ptn + ' ' + t.items.map(i=>i.desc).join(' ')).toLowerCase();
-        if(hay.includes(q)){
-          hits.push({label: c.label, ptn: t.ptn, date: t.date, desc: t.items.map(i=>i.desc).join(', '), loan: t.loan, actual: t.actual});
-        }
-      });
-    });
-
-    if(!hits.length){
-      box.innerHTML = `<span style="color:var(--text-muted);">No matches in any uploaded category.</span>`;
-      return;
-    }
-    box.innerHTML = hits.map(h=>`
-      <div style="padding:8px 0; border-bottom:1px solid var(--border);">
-        <b>${h.ptn}</b> — ${h.label} (${h.date || 'no date'})<br>
-        <span style="color:var(--text-muted);">${h.desc}</span><br>
-        Price ₱${Number(h.loan||0).toLocaleString()}
-        · ${h.actual===null||h.actual===undefined ? 'Pending' : 'Counted: '+h.actual}
-      </div>
-    `).join('');
-  }
-
-  $('#global-search-btn').addEventListener('click', runGlobalSearch);
-  $('#global-search-input').addEventListener('keydown', e=>{
-    if(e.key === 'Enter' || e.keyCode === 13){
-      e.preventDefault();
-      runGlobalSearch();
-      const scanned = $('#global-search-input').value.trim().replace(/[\r\n]+/g, '');
-      if(!scanned) return;
-      $('#global-search-input').value = '';
-      markScannedCodeAsCounted(scanned);
-      setTimeout(() => {
-        $('#global-search-input').value = '';
-        $('#global-search-input').focus();
-      }, 50);
-    }
-  });
 
   // --- TESSERACT.JS TEXT/NUMBER OCR SCANNING ENGINE ---
   async function openScanner(mode){
@@ -1470,12 +1440,7 @@
             $('#scan-result').style.color = '#16a34a';
             $('#scan-result').textContent = `✓ OCR MATCH: ${detectedCode}`;
 
-            if(scanMode === 'toolbar'){
-              $('#search').value = '';
-            } else {
-              $('#global-search-input').value = '';
-              runGlobalSearch();
-            }
+            $('#search').value = '';
 
             setTimeout(() => {
               scanCooldown = false;
@@ -1532,13 +1497,7 @@
       if (success) {
         $('#scan-result').style.color = '#16a34a';
         $('#scan-result').textContent = `✓ OCR MATCH: ${detectedCode}`;
-
-        if(scanMode === 'toolbar'){
-          $('#search').value = '';
-        } else {
-          $('#global-search-input').value = '';
-          runGlobalSearch();
-        }
+        $('#search').value = '';
       } else {
         $('#scan-result').style.color = '#dc2626';
         $('#scan-result').textContent = `⚠️ Scanned "${detectedCode}" — Not in list`;
@@ -1550,7 +1509,6 @@
   });
 
   $('#scan-btn').addEventListener('click', ()=> openScanner('toolbar'));
-  $('#global-scan-btn').addEventListener('click', ()=> openScanner('global'));
   $('#scan-close-btn').addEventListener('click', closeScanner);
 
   // Mobile Sync QR Generator Engine
@@ -1739,8 +1697,6 @@
     $('#category-tabs').innerHTML = '';
     $('#category-tabs').classList.remove('show');
     $('#dashboard').classList.remove('show');
-    $('#global-search-input').value = '';
-    $('#global-search-results').innerHTML = '';
     $('#last-scanned-banner').classList.remove('show');
     setStatus(`Cleared data for branch "${currentBranch}".`);
   });
