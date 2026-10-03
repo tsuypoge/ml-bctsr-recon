@@ -892,12 +892,13 @@
     return -1;
   }
 
+  // UPDATED PARSER: Preserves 21-digit Item Codes as exact strings without numeric rounding
   async function parseExcelFile(file){
     const buf = await file.arrayBuffer();
-    const wb = XLSX.read(buf, {type:'array', codepage: 65001});
+    const wb = XLSX.read(buf, {type:'array', codepage: 65001, raw: false, cellText: true});
     const sheetName = wb.SheetNames[0];
     const sheet = wb.Sheets[sheetName];
-    const rows = XLSX.utils.sheet_to_json(sheet, {header:1, raw:true, defval:''});
+    const rows = XLSX.utils.sheet_to_json(sheet, {header:1, raw:false, rawNumbers:false, formatted:true, defval:''});
 
     let headerIdx = -1, cols = {};
     for(let i=0;i<rows.length;i++){
